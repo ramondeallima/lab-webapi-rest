@@ -19,11 +19,13 @@ namespace DevIO.API.Controllers
         public readonly IFornecedorService _fornecedorService;
 
 
-        public FornecedoresController(IFornecedorRepository fornecedorRepository,
-                                      IMapper mapper)
+        public FornecedoresController(IMapper mapper,
+                                      IFornecedorService fornecedorService,
+                                      IFornecedorRepository fornecedorRepository)
         {
-            _fornecedorRepository = fornecedorRepository;
             _mapper = mapper;
+            _fornecedorService = fornecedorService;
+            _fornecedorRepository = fornecedorRepository;
         }
 
         [HttpGet]
@@ -52,11 +54,11 @@ namespace DevIO.API.Controllers
 
             if (!result) return BadRequest();
 
-            return Ok();
+            return Ok(fornecedor);
         }
 
         [HttpPut("{id:guid}")]
-        public async Task<ActionResult<FornecedorViewModel>> Adicionar(Guid id, FornecedorViewModel fornecedorViewModel)
+        public async Task<ActionResult<FornecedorViewModel>> Atualizar(Guid id, FornecedorViewModel fornecedorViewModel)
         {
             if (id != fornecedorViewModel.Id) return BadRequest();
             if (!ModelState.IsValid) return BadRequest();
